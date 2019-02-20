@@ -1,0 +1,14 @@
+.article {
+  margin: 25px;
+  text-align: center;
+}
+body {
+  background-color: #eeeeee;
+}
+
+.h7 {
+  font-size: 0.8rem;
+}
+.card-link {
+  margin-left: 1.25rem;
+}
