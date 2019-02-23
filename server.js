@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken');
 const DB = require('./db/index');
 const cors = require('cors');
 const request = require('request')
-const key = require('./key');
-const news = require('./data')
+//const key = require('./key');
+//const news = require('./data')
 
 
 const app = express();
