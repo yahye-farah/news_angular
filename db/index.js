@@ -50,6 +50,20 @@ const DB = {
     })
   },
 
+  //login for the user if his username and password are correct
+  loginUser: (user,callback) =>{
+    let query = `select * from users where username='${user.username}' and password ='${user.password}'`
+    connection.query(query, (err,results) => {
+      if(err) {
+        console.log(err)
+        callback(err,null)
+        return
+      }else {
+        callback(null,results);
+      }
+    })
+  },
+
   saveNews: (news, callback) => {
 
     for (let data of news) {
@@ -67,52 +81,17 @@ const DB = {
   },
 
   //get all news in the database and users and comments
-  // allNews: (callback) => {
-  //   let allnews = [];
-  //   let query = `select * from news`
-  //   connection.query(query, (err, results) => {
-  //     if (err) {
-  //       console.log(err);
-  //     } else {
-  //       console.log('yyyyy', results)
-  //       for (let result of results) {
-  //         let obj = {};
-  //         obj['news'] = result;
-
-  //         let query = `select * from comments where news_id='${result.id}'`
-  //         connection.query(query, (err, comments) => {
-  //           if (err) {
-  //             console.log(err);
-  //           } else {
-  //             console.log('comments', comments)
-  //             obj['comments'] = comments;
-  //             result['comments'] = comments;
-  //             if (comments.length > 0) {
-  //               // console.log('shurrud',comments[0]['user_id'])
-  //               let query = `select username from users where id ='${comments[0].user_id}'`
-  //               connection.query(query, (err, user) => {
-  //                 if (err) {
-  //                   console.log(err)
-  //                 } else {
-  //                   // console.log('username',user[0]['username'])
-  //                   result['username'] = user[0]['username'];
-  //                   obj['username'] = user[0]['username'];
-  //                   console.log('obbbb', obj)
-  //                   allnews.push(obj);
-  //                   callback(allnews)
-  //                 }
-  //               })
-  //             }
-  //           }
-  //         })
-
-  //       }
-  //     }
-      
-  //   })
-  // },
-  allNews:(callback) => {
-    let query = `select `
+  allNews: (callback) => {
+    //SELECT news.newstext, comments.comment, users.username from news INNER JOIN comments on comments.news_id=news.id INNER JOIN users on users.id = comments.user_id
+    let query = `select news.newstext, comments.comment, users.username from news inner join comments on comments.news_id = news.id inner join users on users.id=comments.user_id`
+    connection.query(query, (err, results) => {
+      if(err) {
+        console.log(err);
+      }else {
+        console.log('>><<<<',results)
+        callback(results)
+      }
+    });
   },
 
   //save comments to database
@@ -137,6 +116,7 @@ const DB = {
         console.log(err);
       } else {
         console.log('the comment is updated successfuly');
+        callback('you successfuly edited your comment')
       }
     })
   },
@@ -155,3 +135,5 @@ const DB = {
 
 }
 module.exports = DB;
+
+//SELECT news.newstext, comments.comment, users.username from news INNER JOIN comments on comments.news_id=news.id INNER JOIN users on users.id = comments.user_id
